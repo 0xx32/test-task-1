@@ -28,7 +28,20 @@ const isLDAP = computed(() => type !== 'local')
 
 const { errors, validate } = useValidate(accountSchema)
 
+const splitTags = (value: string) => {
+	if (!value.trim()) {
+		accountModel.value.tags = []
+		return
+	}
+	accountModel.value.tags = value
+		.split(';')
+		.filter(Boolean)
+		.map((text) => ({ text: text.trim() }))
+}
+
 const onBlur = () => {
+	splitTags(accountModel.value.tagString)
+
 	validate({
 		login: accountModel.value.login,
 		password: accountModel.value.password,
@@ -36,7 +49,7 @@ const onBlur = () => {
 		type: accountModel.value.type,
 	})
 }
-const removeHandler = () => {
+const removeAccountHandler = () => {
 	emits('remove', id)
 }
 </script>
@@ -84,7 +97,7 @@ const removeHandler = () => {
 			@blur="onBlur()"
 		/>
 
-		<Button variant="ghost" @click="removeHandler">
+		<Button variant="ghost" @click="removeAccountHandler">
 			<Trash2 />
 		</Button>
 	</div>
