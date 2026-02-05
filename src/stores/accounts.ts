@@ -4,17 +4,18 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAccountsStore = defineStore('accounts', () => {
-	const accounts = ref<Account[]>([])
+	//Можно изменить на useStore из @vueUse
+	const accounts = ref<Account[]>(
+		localStorage.getItem('accounts') ? JSON.parse(localStorage.getItem('accounts') as string) : []
+	)
 
 	const addAccount = () => {
 		accounts.value.push({
 			id: crypto.randomUUID(),
-			tagString: '',
 			tags: [],
 			type: 'local',
 			login: '',
 			password: '',
-			touched: false,
 		})
 	}
 
@@ -22,9 +23,15 @@ export const useAccountsStore = defineStore('accounts', () => {
 		accounts.value = accounts.value.filter((a) => a.id !== id)
 	}
 
+	const updateAccount = (account: Account) => {
+		const index = accounts.value.findIndex((a) => a.id === account.id)
+		accounts.value[index] = account
+	}
+
 	return {
 		accounts,
 		addAccount,
 		removeAccount,
+		updateAccount,
 	}
 })

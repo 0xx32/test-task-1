@@ -7,6 +7,10 @@ import AccountRow from './components/AccountRow.vue'
 import { useAccountsStore } from './stores/accounts'
 
 const accountsStore = useAccountsStore()
+
+accountsStore.$subscribe((_, state) => {
+	localStorage.setItem('accounts', JSON.stringify(state.accounts))
+})
 </script>
 
 <template>
@@ -37,10 +41,11 @@ const accountsStore = useAccountsStore()
 		<div class="flex flex-col gap-4">
 			<AccountRow
 				v-for="account in accountsStore.accounts"
-				v-bind="account"
+				:id="account.id"
 				:key="account.id"
-				:model-value="account"
+				:initial-account="account"
 				@remove="(id) => accountsStore.removeAccount(id)"
+				@update="(account) => accountsStore.updateAccount(account)"
 			/>
 		</div>
 	</div>

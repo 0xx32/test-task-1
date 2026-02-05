@@ -14,7 +14,12 @@ export const accountSchema = v.variant('type', [
 	v.object({
 		...baseSchema,
 		type: v.literal('local'),
-		password: v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(100)),
+		password: v.pipe(
+			v.string(),
+			v.trim(),
+			v.minLength(1, 'Пароль обязателен'),
+			v.maxLength(100, 'Максимум 100 символов')
+		),
 	}),
 	v.object({
 		...baseSchema,

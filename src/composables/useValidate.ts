@@ -9,6 +9,7 @@ export const useValidate = <T>(schema: GenericSchema<T>) => {
 	const errors = ref<Errors<T>>({})
 	const wasValidated = ref(false)
 	const isValid = computed(() => wasValidated.value && Object.keys(errors.value).length === 0)
+
 	const validate = (data: T) => {
 		wasValidated.value = true
 		const result = safeParse(schema, data)
@@ -25,9 +26,13 @@ export const useValidate = <T>(schema: GenericSchema<T>) => {
 					newErrors[key] = issue.message
 				}
 			})
+
+			errors.value = newErrors
+
+			return false
 		}
 
-		errors.value = newErrors
+		return true
 	}
 
 	return { errors, isValid, validate }
