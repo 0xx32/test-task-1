@@ -4,7 +4,7 @@ import type { Account } from '@/types'
 import { Trash2 } from 'lucide-vue-next'
 import { computed } from 'vue'
 
-import { Button, Input, PasswordInput } from '@/components/ui'
+import { Button, Input, PasswordInput, Textarea } from '@/components/ui'
 import {
 	Select,
 	SelectContent,
@@ -26,7 +26,7 @@ const accountModel = defineModel<Account>({
 })
 const isLDAP = computed(() => type !== 'local')
 
-const { errors, validate, isValid } = useValidate(accountSchema)
+const { errors, validate } = useValidate(accountSchema)
 
 const onBlur = () => {
 	validate({
@@ -41,15 +41,15 @@ const removeHandler = () => {
 }
 </script>
 <template>
-	isValid {{ isValid }}
 	<div class="grid grid-cols-[1fr_1fr_1fr_1fr_40px] gap-5">
-		<Input
+		<Textarea
 			v-model="accountModel.tagString"
 			name="tagString"
 			placeholder="Значение"
 			:class="{
 				'border border-red-500': !!errors.tagString,
 			}"
+			class="h-9 min-h-9 resize-none overflow-hidden py-2 focus:overflow-y-auto"
 			@blur="onBlur()"
 		/>
 
@@ -77,6 +77,7 @@ const removeHandler = () => {
 			v-model="accountModel.password"
 			name="password"
 			placeholder="Значение"
+			wrapper-class="h-fit"
 			:class="{
 				'border border-red-500': !!errors.password,
 			}"

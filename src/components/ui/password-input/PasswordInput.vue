@@ -15,6 +15,7 @@ const props = defineProps<{
 	defaultValue?: number | string
 	modelValue?: number | string
 	class?: HTMLAttributes['class']
+	wrapperClass?: HTMLAttributes['class']
 }>()
 
 const emits = defineEmits<{
@@ -34,7 +35,7 @@ const toggleShow = () => {
 </script>
 
 <template>
-	<div class="relative">
+	<div class="relative" :class="wrapperClass">
 		<Input
 			v-model="modelValue"
 			:type="show ? 'text' : 'password'"
